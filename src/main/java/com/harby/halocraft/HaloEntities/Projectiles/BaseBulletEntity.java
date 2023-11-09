@@ -1,5 +1,6 @@
 package com.harby.halocraft.HaloEntities.Projectiles;
 
+import com.harby.halocraft.HaloCraft;
 import com.harby.halocraft.HaloEntities.BaseClasses.BasicVehicleEntity;
 import com.harby.halocraft.core.HaloEntities;
 import net.minecraft.core.BlockPos;
@@ -9,6 +10,8 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -120,15 +123,15 @@ public class BaseBulletEntity extends Projectile {
             boolean flag = true;
             this.noPhysics = false;
             BlockState state = this.level().getBlockState(result.getBlockPos());
-            if (state.getBlock() instanceof GlassBlock){
-                level().destroyBlock(result.getBlockPos(),true,this.getOwner());
-            }else if (state.getBlock() instanceof IronBarsBlock){
-                float durability = state.getDestroySpeed(level(),result.getBlockPos());
-                if (durability >= 0 && durability <= 1){
-                    level().destroyBlock(result.getBlockPos(),true,this.getOwner());
-                }else{
-                    this.noPhysics = true;
-                    flag = false;
+            if (state.is(BlockTags.create(new ResourceLocation(HaloCraft.MODID,"shooting_through")))){
+                this.noPhysics = true;
+                flag = false;
+            }else{
+                if (state.getBlock() instanceof IronBarsBlock || state.getBlock() instanceof GlassBlock){
+                    float durability = state.getDestroySpeed(level(),result.getBlockPos());
+                    if (durability >= 0 && durability <= 1){
+                        level().destroyBlock(result.getBlockPos(),true,this.getOwner());
+                    }
                 }
             }
             if (flag){
