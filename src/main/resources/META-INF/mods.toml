@@ -19,7 +19,7 @@ modId="halocraft" #mandatory
 # The version number of the mod
 version="1.0.0" #mandatory
 # A display name for the mod
-displayName="Halocraft" #mandatory
+displayName="Halo:Crafting Evolved" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://docs.neoforged.net/docs/misc/updatechecker/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI

@@ -56,6 +56,7 @@ public class Gun extends Item {
         if (!level.isClientSide) {
             BaseBulletEntity bulletEntity = new BaseBulletEntity(level,livingEntity);
             bulletEntity.setProjectileType(getAmmoType(stack));
+            bulletEntity.setDamage(5.0f);
             bulletEntity.shootFromRotation(livingEntity, livingEntity.getXRot(), livingEntity.getYRot(), 0.0F, 6.0F, 1.0F);
             level.addFreshEntity(bulletEntity);
         }

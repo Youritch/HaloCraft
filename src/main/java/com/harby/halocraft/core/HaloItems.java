@@ -2,9 +2,11 @@ package com.harby.halocraft.core;
 
 import com.harby.halocraft.HaloCraft;
 import com.harby.halocraft.HaloItems.AssaultRifle;
+import com.harby.halocraft.HaloItems.BlockItemBase;
 import com.harby.halocraft.HaloItems.Gun;
 import com.harby.halocraft.HaloItems.ItemBase;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -32,9 +34,20 @@ public class HaloItems {
     public  static final RegistryObject<Item> PENETRATING_BULLET = ITEMS.register("penetrating_bullet",
             () -> new ItemBase( new Item.Properties()));
 
-    public  static final RegistryObject<Item> GUN = ITEMS.register("gun",
-            () -> new Gun( new Item.Properties()));
 
     public  static final RegistryObject<Item> AssaultRifle = ITEMS.register("assault_rifle",
             () -> new AssaultRifle( new Item.Properties()));
+
+
+    private static RegistryObject<Item> block(RegistryObject<Block> block) {
+        return ITEMS.register(block.getId().getPath(), () -> new BlockItemBase(block.get(), new Item.Properties()));
+    }
+    public static final RegistryObject<Item> CONCRETE_BRICK = block(HaloBlocks.CONCRETE_BRICK);
+    public static final RegistryObject<Item> CONCRETE_BRICK_POLISHED = block(HaloBlocks.CONCRETE_BRICK_POLISHED);
+    public static final RegistryObject<Item> CONCRETE_LAYERED = block(HaloBlocks.CONCRETE_LAYERED);
+    public static final RegistryObject<Item> CONCRETE_LAYERED_SECOND = block(HaloBlocks.CONCRETE_LAYERED_SECOND);
+
+    public static final RegistryObject<Item> ASTEROID = block(HaloBlocks.ASTEROID);
+    public static final RegistryObject<Item> DENSE_ASTEROID = block(HaloBlocks.DENSE_ASTEROID);
+
 }

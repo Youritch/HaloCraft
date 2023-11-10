@@ -3,6 +3,7 @@ package com.harby.halocraft.HaloEntities.BaseClasses;
 import com.harby.halocraft.HaloCraft;
 import com.harby.halocraft.Message.HaloKeys;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -131,6 +132,11 @@ public class BasicVehicleEntity extends Entity {
         return false;
     }
 
+    public boolean isHoveringVehicle(){
+        return false;
+    }
+
+
     public Item getDropItem() {
         return ItemStack.EMPTY.getItem();
     }
@@ -202,8 +208,16 @@ public class BasicVehicleEntity extends Entity {
             }else if (this.isInWaterOrBubble() && this.isWaterVehicle()) {
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 this.setDeltaMovement(this.getDeltaMovement().multiply(waterSpeed(), waterSpeed(), waterSpeed()));
+            }else if (this.isHoveringVehicle()) {
+                if (this.isInFluidType()){
+                    this.setDeltaMovement(this.getDeltaMovement().add(0, 0.1F, 0));
+                }else{
+                    this.setDeltaMovement(this.getDeltaMovement().add(0, -0.01F, 0));
+                }
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().multiply(flyingSpeed(), flyingSpeed(), flyingSpeed()));
             } else {
-                this.setDeltaMovement(this.getDeltaMovement().add(0, -0.5F, 0));
+                this.setDeltaMovement(this.getDeltaMovement().add(0, -0.3F, 0));
                 this.move(MoverType.SELF, this.getDeltaMovement().scale(0.9F));
                 this.setDeltaMovement(this.getDeltaMovement().multiply(speed(),speed(),speed()));
             }

@@ -3,6 +3,7 @@ package com.harby.halocraft.core;
 import com.harby.halocraft.HaloCraft;
 import com.harby.halocraft.HaloEntities.Projectiles.BaseBulletEntity;
 import com.harby.halocraft.HaloEntities.Vehicles.CarEntity;
+import com.harby.halocraft.HaloEntities.Vehicles.Ghost;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -29,6 +30,10 @@ public class HaloEntities {
     public static final RegistryObject<EntityType<CarEntity>> CAR = HALO_ENTITIES.register("car",
             () -> EntityType.Builder.of((EntityType<CarEntity> p_33002_, Level level) -> new CarEntity(level), MobCategory.MISC).sized(2f, 2f)
                     .build(new ResourceLocation(HaloCraft.MODID, "car").toString()));
+
+    public static final RegistryObject<EntityType<Ghost>> GHOST = HALO_ENTITIES.register("ghost",
+            () -> EntityType.Builder.of((EntityType<Ghost> p_33002_, Level level) -> new Ghost(level), MobCategory.MISC).sized(2f, 2f)
+                    .build(new ResourceLocation(HaloCraft.MODID, "ghost").toString()));
 
     public static final RegistryObject<EntityType<BaseBulletEntity>> BULLET = register("bullet",
             EntityType.Builder.of((EntityType<BaseBulletEntity> p_33002_, Level level) -> new BaseBulletEntity(level), MobCategory.MISC)

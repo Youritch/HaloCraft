@@ -1,7 +1,9 @@
 package com.harby.halocraft.Client;
 
+import com.harby.halocraft.Client.Models.GhostModel;
 import com.harby.halocraft.Client.Models.WarthogModel;
 import com.harby.halocraft.Client.Renderers.BulletRenderer;
+import com.harby.halocraft.Client.Renderers.GhostRenderer;
 import com.harby.halocraft.Client.Renderers.WarthogRenderer;
 import com.harby.halocraft.HaloCraft;
 import com.harby.halocraft.core.HaloEntities;
@@ -19,12 +21,14 @@ public class ClientEvents {
     @SubscribeEvent
     public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(WarthogModel.LAYER_LOCATION, WarthogModel::createBodyLayer);
+        event.registerLayerDefinition(GhostModel.LAYER_LOCATION, GhostModel::createBodyLayer);
     }
 
 
     @SubscribeEvent
     public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event) {
         event.registerEntityRenderer(HaloEntities.CAR.get(), WarthogRenderer::new);
+        event.registerEntityRenderer(HaloEntities.GHOST.get(), GhostRenderer::new);
         event.registerEntityRenderer(HaloEntities.BULLET.get(), BulletRenderer::new);
     }
 }

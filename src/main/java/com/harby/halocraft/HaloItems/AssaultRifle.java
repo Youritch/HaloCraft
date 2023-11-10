@@ -1,5 +1,10 @@
 package com.harby.halocraft.HaloItems;
 
+import com.harby.halocraft.HaloEntities.Projectiles.BaseBulletEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+
 public class AssaultRifle extends Gun{
     public AssaultRifle(Properties properties) {
         super(properties);
@@ -15,5 +20,14 @@ public class AssaultRifle extends Gun{
         return 2;
     }
 
-
+    @Override
+    public void shotProjectile(Level level, LivingEntity livingEntity,ItemStack stack){
+        if (!level.isClientSide) {
+            BaseBulletEntity bulletEntity = new BaseBulletEntity(level,livingEntity);
+            bulletEntity.setProjectileType(getAmmoType(stack));
+            bulletEntity.setDamage(7.0f);
+            bulletEntity.shootFromRotation(livingEntity, livingEntity.getXRot(), livingEntity.getYRot(), 0.0F, 6.0F, 1.0F);
+            level.addFreshEntity(bulletEntity);
+        }
+    }
 }

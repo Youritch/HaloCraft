@@ -30,18 +30,19 @@ import org.jetbrains.annotations.NotNull;
 public class BaseBulletEntity extends Projectile {
     private static final EntityDataAccessor<Integer> TYPE =
             SynchedEntityData.defineId(BaseBulletEntity.class, EntityDataSerializers.INT);
+    private float setBaseDamage;
 
     public BaseBulletEntity(Level level) {
         super(HaloEntities.BULLET.get(), level);
     }
-    public BaseBulletEntity(Level level, LivingEntity livingEntity) {
+    public BaseBulletEntity(Level level, Entity livingEntity) {
         super(HaloEntities.BULLET.get(), level);
         this.setOwner(livingEntity);
         BlockPos blockpos = livingEntity.blockPosition();
         double d0 = (double)blockpos.getX() + 0.5D;
         double d1 = (double)blockpos.getY() + 1.5D;
         double d2 = (double)blockpos.getZ() + 0.5D;
-        this.moveTo(d0, d1, d2, this.getYRot(), this.getXRot());
+        this.moveTo(d0, d1, d2, livingEntity.getYRot(), this.getXRot());
     }
 
 
@@ -84,21 +85,21 @@ public class BaseBulletEntity extends Projectile {
         if (!this.level().isClientSide()) {
             if (entityHitResult.getEntity() instanceof LivingEntity livingEntity){
                 if (this.getProjectileType() == 0){
-                    livingEntity.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), setDamage());
+                    livingEntity.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), getDamage());
                 }
                 else if (this.getProjectileType() == 1){
-                    livingEntity.hurt(this.level().damageSources().explosion(this, this.getOwner()), setDamage());
+                    livingEntity.hurt(this.level().damageSources().explosion(this, this.getOwner()), getDamage());
                     livingEntity.level().explode(this, this.getX(), this.getY(), this.getZ(), 1.0f, Level.ExplosionInteraction.NONE);
                 }
                 else if (this.getProjectileType() == 2){
-                    livingEntity.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), setDamage());
+                    livingEntity.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), getDamage());
                     livingEntity.setSecondsOnFire(6);
                 }
                 else if (this.getProjectileType() == 3){
-                    livingEntity.hurt(this.level().damageSources().freeze(), setDamage());
+                    livingEntity.hurt(this.level().damageSources().freeze(), getDamage());
                 }
                 else if (this.getProjectileType() == 4){
-                    livingEntity.hurt(this.level().damageSources().sonicBoom(this), setDamage());
+                    livingEntity.hurt(this.level().damageSources().sonicBoom(this), getDamage());
                 }
             }else{
                 if (entityHitResult.getEntity() instanceof BasicVehicleEntity basicVehicle){
@@ -106,9 +107,9 @@ public class BaseBulletEntity extends Projectile {
                     if (this.getProjectileType() == 1 || this.getProjectileType() == 4){
                         i = 2;
                     }
-                    basicVehicle.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), setDamage() * i);
+                    basicVehicle.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), getDamage() * i);
                 }else {
-                    entityHitResult.getEntity().hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), setDamage());
+                    entityHitResult.getEntity().hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), getDamage());
                 }
             }
         }else{
@@ -141,8 +142,11 @@ public class BaseBulletEntity extends Projectile {
 
     }
 
-    public float setDamage(){
-        return 5.0F;
+    public float getDamage(){
+        return this.setBaseDamage;
+    }
+    public void setDamage(float value){
+        this.setBaseDamage = value;
     }
 
 
