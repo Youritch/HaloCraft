@@ -4,6 +4,7 @@ import com.harby.halocraft.HaloCraft;
 import com.harby.halocraft.HaloEntities.BaseClasses.BasicVehicleEntity;
 import com.harby.halocraft.HaloEntities.Projectiles.BaseBulletEntity;
 import com.harby.halocraft.Message.HaloKeys;
+import com.harby.halocraft.core.HaloConfig;
 import com.harby.halocraft.core.HaloEntities;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -17,6 +18,8 @@ public class Ghost extends BasicVehicleEntity {
         this.setMaxUpStep(1.3F);
     }
 
+
+
     @Override
     public boolean isHoveringVehicle() {
         return true;
@@ -24,9 +27,8 @@ public class Ghost extends BasicVehicleEntity {
 
     @Override
     public float getMaxVehicleHealth() {
-        return 40;
+        return (float) (HaloConfig.SERVER.ghost_hp.get() * 1.0F);
     }
-
     @Override
     public float getTopSpeed() {
         return 2.1F;

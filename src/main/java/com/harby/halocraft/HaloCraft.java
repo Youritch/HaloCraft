@@ -38,8 +38,8 @@ public class HaloCraft
         HaloCreativeTab.register(modEventBus);
         HaloEntities.register(modEventBus);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, HaloConfig.SPEC ,HaloCraft.MODID+"_config.toml");
-        HaloConfig.loadConfig(HaloConfig.SPEC, FMLPaths.CONFIGDIR.get().resolve(HaloCraft.MODID+"_config.toml").toString());
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, HaloConfig.SERVER_SPEC ,HaloCraft.MODID+"_config.toml");
+        HaloConfig.loadConfig(HaloConfig.SERVER_SPEC, FMLPaths.CONFIGDIR.get().resolve(HaloCraft.MODID+"_config.toml").toString());
     }
 
 

@@ -1,6 +1,7 @@
 package com.harby.halocraft.HaloEntities.Vehicles;
 
 import com.harby.halocraft.HaloEntities.BaseClasses.BasicVehicleEntity;
+import com.harby.halocraft.core.HaloConfig;
 import com.harby.halocraft.core.HaloEntities;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.util.Mth;
@@ -88,6 +89,11 @@ public class CarEntity extends BasicVehicleEntity {
         return this.subEntities;
     }
 
+
+    @Override
+    public float getMaxVehicleHealth() {
+        return (float) (HaloConfig.SERVER.car_hp.get() * 1.0F);
+    }
 
     @Override
     public boolean isMultipartEntity() {
