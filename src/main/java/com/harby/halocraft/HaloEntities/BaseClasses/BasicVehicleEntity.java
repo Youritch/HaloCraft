@@ -256,6 +256,14 @@ public class BasicVehicleEntity extends Entity {
         }
     }
 
+    protected boolean canAddPassenger(Entity p_38390_) {
+        return this.getPassengers().size() < this.getMaxPassengers();
+    }
+
+    protected int getMaxPassengers() {
+        return 1;
+    }
+
     @Override
     public void lerpTo(double x, double y, double z, float yr, float xr, int steps, boolean b) {
         this.lx = x;

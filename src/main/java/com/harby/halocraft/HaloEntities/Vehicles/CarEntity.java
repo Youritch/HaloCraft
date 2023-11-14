@@ -3,15 +3,25 @@ package com.harby.halocraft.HaloEntities.Vehicles;
 import com.harby.halocraft.HaloEntities.BaseClasses.BasicVehicleEntity;
 import com.harby.halocraft.core.HaloConfig;
 import com.harby.halocraft.core.HaloEntities;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.players.OldUsersConverter;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
+import java.util.UUID;
 
 public class CarEntity extends BasicVehicleEntity {
     private final CarPartEntity[] subEntities;
@@ -23,7 +33,7 @@ public class CarEntity extends BasicVehicleEntity {
         this.setMaxUpStep(1.0F);
         this.engine = new CarPartEntity(this, "engine", 2.0F, 1.2F);
         this.gun = new CarPartEntity(this, "gun", 2.0F, 1.2F);
-        this.subEntities = new CarPartEntity[]{ this.engine,this.gun};
+        this.subEntities = new CarPartEntity[]{this.engine,this.gun};
         this.setId(ENTITY_COUNTER.getAndAdd(this.subEntities.length + 1) + 1);
     }
 
@@ -34,6 +44,10 @@ public class CarEntity extends BasicVehicleEntity {
             this.subEntities[i].setId(p_20235_ + i + 1);
     }
 
+    @Override
+    protected int getMaxPassengers() {
+        return 2;
+    }
 
     @Override
     public float getTopSpeed() {
@@ -49,11 +63,15 @@ public class CarEntity extends BasicVehicleEntity {
     @Override
     protected void positionRider(Entity entity, MoveFunction p_19958_) {
         super.positionRider(entity, p_19958_);
-        Vec3 vec3 = (new Vec3(0.1D, 0.0D, -0.6D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
+        Vec3 vec3;
+        if (entity == this.getFirstPassenger()){
+            vec3 = (new Vec3(0.1D, 0.0D, -0.6D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
+        }else{
+            vec3 = (new Vec3(0.1D, 0.0D, +0.6D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
+
+        }
         entity.setPos(this.getX() + vec3.x, this.getY() + 0.2,this.getZ()+ vec3.z);
     }
-
-
 
 
     @Override
@@ -100,7 +118,7 @@ public class CarEntity extends BasicVehicleEntity {
         return true;
     }
 
-    @Override
+        @Override
     public net.minecraftforge.entity.PartEntity<?>[] getParts() {
         return this.subEntities;
     }
@@ -116,28 +134,19 @@ public class CarEntity extends BasicVehicleEntity {
 
     }
 
+    public CarPartEntity getGun() {
+        return gun;
+    }
+
+
     @Override
     public boolean canCollideWith(Entity entity) {
         if (entity == this.engine){
             return false;
-        }if (entity == this.gun){
+        }
+        if (entity == this.gun){
             return false;
         }
         return super.canCollideWith(entity);
-    }
-
-    public void interact(CarPartEntity carPartEntity, Player player, InteractionHand hand) {
-        if (carPartEntity == gun){
-            player.startRiding(gun);
-            this.gameEvent(GameEvent.ENTITY_INTERACT);
-        }
-    }
-
-    public void positionRider(CarPartEntity carPartEntity, Entity passenger, MoveFunction moveFunction) {
-
-    }
-    public boolean hurt(CarPartEntity carPartEntity, DamageSource source, float value) {
-        this.hurt(source,value);
-        return true;
     }
 }

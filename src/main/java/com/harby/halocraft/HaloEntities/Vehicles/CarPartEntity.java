@@ -55,15 +55,10 @@ public class CarPartEntity extends PartEntity<CarEntity> {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
-        this.parentMob.interact(this , player, hand);
+        parentMob.interact(player,hand);
         return super.interact(player, hand);
     }
 
-    @Override
-    protected void positionRider(Entity entity, MoveFunction moveFunction) {
-        this.parentMob.positionRider(this,entity,moveFunction);
-        super.positionRider(entity, moveFunction);
-    }
 
     @Nullable
     public ItemStack getPickResult() {
@@ -71,7 +66,7 @@ public class CarPartEntity extends PartEntity<CarEntity> {
     }
 
     public boolean hurt(DamageSource source, float value) {
-        return !this.isInvulnerableTo(source) && this.parentMob.hurt(this, source, value);
+        return !this.isInvulnerableTo(source) && this.parentMob.hurt(source, value);
     }
 
     public boolean is(Entity p_31031_) {
@@ -87,7 +82,7 @@ public class CarPartEntity extends PartEntity<CarEntity> {
     }
 
     public boolean shouldBeSaved() {
-        return false;
+        return true;
     }
 
 }
