@@ -2,6 +2,7 @@ package com.harby.halocraft.core;
 
 import com.harby.halocraft.HaloCraft;
 import com.harby.halocraft.HaloEntities.Projectiles.BaseBulletEntity;
+import com.harby.halocraft.HaloEntities.Projectiles.PlasmaProjectileEntity;
 import com.harby.halocraft.HaloEntities.Vehicles.CarEntity;
 import com.harby.halocraft.HaloEntities.Vehicles.Ghost;
 import net.minecraft.resources.ResourceLocation;
@@ -37,6 +38,10 @@ public class HaloEntities {
 
     public static final RegistryObject<EntityType<BaseBulletEntity>> BULLET = register("bullet",
             EntityType.Builder.of((EntityType<BaseBulletEntity> p_33002_, Level level) -> new BaseBulletEntity(level), MobCategory.MISC)
+                    .setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
+
+    public static final RegistryObject<EntityType<PlasmaProjectileEntity>> LASER = register("laser",
+            EntityType.Builder.of((EntityType<PlasmaProjectileEntity> p_33002_, Level level) -> new PlasmaProjectileEntity(level), MobCategory.MISC)
                     .setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(1).sized(0.4f, 0.4f));
 
 }

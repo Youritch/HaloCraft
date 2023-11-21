@@ -212,7 +212,7 @@ public class BasicVehicleEntity extends Entity {
                 if (this.isInFluidType()){
                     this.setDeltaMovement(this.getDeltaMovement().add(0, 0.1F, 0));
                 }else{
-                    this.setDeltaMovement(this.getDeltaMovement().add(0, -0.01F, 0));
+                    this.setDeltaMovement(this.getDeltaMovement().add(0, -0.05F, 0));
                 }
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 this.setDeltaMovement(this.getDeltaMovement().multiply(flyingSpeed(), flyingSpeed(), flyingSpeed()));

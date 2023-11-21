@@ -47,6 +47,14 @@ public class HaloItems {
     public static final RegistryObject<Item> CONCRETE_LAYERED = block(HaloBlocks.CONCRETE_LAYERED);
     public static final RegistryObject<Item> CONCRETE_LAYERED_SECOND = block(HaloBlocks.CONCRETE_LAYERED_SECOND);
 
+    public static final RegistryObject<Item> ASPHALT = block(HaloBlocks.ASPHALT);
+    public static final RegistryObject<Item> CONCRETE_YELLOW_DOUBLE = block(HaloBlocks.CONCRETE_YELLOW_DOUBLE);
+    public static final RegistryObject<Item> WHITE_LINE = block(HaloBlocks.WHITE_LINE);
+    public static final RegistryObject<Item> WHITE_LINE_DOTS = block(HaloBlocks.WHITE_LINE_DOTS);
+    public static final RegistryObject<Item> YELLOW_DOUBLE = block(HaloBlocks.YELLOW_DOUBLE);
+    public static final RegistryObject<Item> YELLOW_DOUBLE_DOT = block(HaloBlocks.YELLOW_DOUBLE_DOT);
+    public static final RegistryObject<Item> YELLOW_LINE = block(HaloBlocks.YELLOW_LINE);
+
     public static final RegistryObject<Item> ASTEROID = block(HaloBlocks.ASTEROID);
     public static final RegistryObject<Item> DENSE_ASTEROID = block(HaloBlocks.DENSE_ASTEROID);
 

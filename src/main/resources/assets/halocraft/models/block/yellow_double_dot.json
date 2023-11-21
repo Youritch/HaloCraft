@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "halocraft:block/yellow_double_dot"
+  }
+}
