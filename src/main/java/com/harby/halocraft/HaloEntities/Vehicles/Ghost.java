@@ -7,6 +7,7 @@ import com.harby.halocraft.Message.HaloKeys;
 import com.harby.halocraft.core.HaloConfig;
 import com.harby.halocraft.core.HaloEntities;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -94,27 +95,27 @@ public class Ghost extends BasicVehicleEntity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        tag.putInt("tint",this.getTint());
         super.readAdditionalSaveData(tag);
+        this.setTint(tag.getInt("tint"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
-        this.setTint(tag.getInt("tint"));
         super.addAdditionalSaveData(tag);
+        tag.putInt("tint",this.getTint());
     }
 
     @Override
     protected void defineSynchedData() {
-        this.entityData.define(TINT, 0);
         super.defineSynchedData();
+        this.entityData.define(TINT, 0);
     }
 
     public void setTint(int i){
-        entityData.set(TINT,i);
+        this.entityData.set(TINT,i);
     }
     public int getTint(){
-        return entityData.get(TINT);
+        return this.entityData.get(TINT);
     }
 
     @Override

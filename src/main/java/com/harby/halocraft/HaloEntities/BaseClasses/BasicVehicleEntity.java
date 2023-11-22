@@ -66,14 +66,14 @@ public class BasicVehicleEntity extends Entity {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        tag.putFloat("damage",this.getDamageLevel());
-        tag.putFloat("acceleration",this.getAccelerationLevel());
+        this.setDamageLevel(tag.getFloat("damage"));
+        this.setAcceleration(tag.getFloat("acceleration"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
-        this.setDamageLevel(tag.getFloat("damage"));
-        this.setAcceleration(tag.getFloat("acceleration"));
+        tag.putFloat("damage",this.getDamageLevel());
+        tag.putFloat("acceleration",this.getAccelerationLevel());
     }
 
     @Override
