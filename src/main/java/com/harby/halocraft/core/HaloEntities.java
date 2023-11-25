@@ -3,6 +3,7 @@ package com.harby.halocraft.core;
 import com.harby.halocraft.HaloCraft;
 import com.harby.halocraft.HaloEntities.Projectiles.BaseBulletEntity;
 import com.harby.halocraft.HaloEntities.Projectiles.PlasmaProjectileEntity;
+import com.harby.halocraft.HaloEntities.Vehicles.Banshe;
 import com.harby.halocraft.HaloEntities.Vehicles.CarEntity;
 import com.harby.halocraft.HaloEntities.Vehicles.Ghost;
 import net.minecraft.resources.ResourceLocation;
@@ -33,8 +34,11 @@ public class HaloEntities {
                     .build(new ResourceLocation(HaloCraft.MODID, "car").toString()));
 
     public static final RegistryObject<EntityType<Ghost>> GHOST = HALO_ENTITIES.register("ghost",
-            () -> EntityType.Builder.of((EntityType<Ghost> p_33002_, Level level) -> new Ghost(level), MobCategory.MISC).sized(2f, 2f)
+            () -> EntityType.Builder.of((EntityType<Ghost> p_33002_, Level level) -> new Ghost(level), MobCategory.MISC).sized(2f, 1.1f)
                     .build(new ResourceLocation(HaloCraft.MODID, "ghost").toString()));
+    public static final RegistryObject<EntityType<Banshe>> BANSHE = HALO_ENTITIES.register("banshe",
+            () -> EntityType.Builder.of((EntityType<Banshe> p_33002_, Level level) -> new Banshe(level), MobCategory.MISC).sized(2f, 2f)
+                    .build(new ResourceLocation(HaloCraft.MODID, "banshe").toString()));
 
     public static final RegistryObject<EntityType<BaseBulletEntity>> BULLET = register("bullet",
             EntityType.Builder.of((EntityType<BaseBulletEntity> p_33002_, Level level) -> new BaseBulletEntity(level), MobCategory.MISC)

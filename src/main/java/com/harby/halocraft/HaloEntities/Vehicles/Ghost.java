@@ -7,7 +7,6 @@ import com.harby.halocraft.Message.HaloKeys;
 import com.harby.halocraft.core.HaloConfig;
 import com.harby.halocraft.core.HaloEntities;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -70,15 +69,16 @@ public class Ghost extends BasicVehicleEntity {
                 PlasmaProjectileEntity bulletEntity = new PlasmaProjectileEntity(this.level(),this);
                 bulletEntity.setOwner(player);
                 bulletEntity.setBaseDamage(10.0F);
-                bulletEntity.setColor(29107);
+                bulletEntity.setTemperature(500);
+                bulletEntity.setColor(3113940);
                 bulletEntity.shootFromRotation(this, this.getXRot(), this.getYRot(), 0.0F, 6.0F, 1.0F);
                 Vec3 vec3;
                 if (random.nextFloat() < 0.5f){
-                    vec3 = (new Vec3(1.2D, 0.0D, 0.4D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
+                    vec3 = (new Vec3(1.5D, 0.0D, 0.42D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
                 }else{
-                    vec3 = (new Vec3(1.2D, 0.0D, -0.4D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
+                    vec3 = (new Vec3(1.5D, 0.0D, -0.42D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
                 }
-                bulletEntity.moveTo(this.getX() + vec3.x, this.getY() ,this.getZ()+ vec3.z);
+                bulletEntity.moveTo(this.getX() + vec3.x, this.getY()+0.32D ,this.getZ()+ vec3.z);
                 this.level().addFreshEntity(bulletEntity);
             }
         }

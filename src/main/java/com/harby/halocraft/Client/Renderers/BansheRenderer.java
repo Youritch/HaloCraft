@@ -1,27 +1,28 @@
 package com.harby.halocraft.Client.Renderers;
 
-import com.harby.halocraft.Client.Models.PlasmaProjectileModel;
+import com.harby.halocraft.Client.Models.BansheModel;
+import com.harby.halocraft.Client.Models.WarthogModel;
 import com.harby.halocraft.HaloCraft;
-import com.harby.halocraft.HaloEntities.Projectiles.PlasmaProjectileEntity;
+import com.harby.halocraft.HaloEntities.BaseClasses.BasicVehicleEntity;
+import com.harby.halocraft.HaloEntities.Vehicles.Banshe;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 
-public class PlasmaProjectileRenderer<T extends PlasmaProjectileEntity> extends EntityRenderer<T> {
-    private final PlasmaProjectileModel model;
+public class BansheRenderer<T extends Banshe> extends EntityRenderer<T> {
+    private final BansheModel model;
     private static final ResourceLocation TEXTURE = new ResourceLocation(HaloCraft.MODID,
-            "textures/entity/plasma.png");
-    public PlasmaProjectileRenderer(EntityRendererProvider.Context context) {
+            "textures/entity/banshee.png");
+
+    public BansheRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new PlasmaProjectileModel();
+        this.shadowRadius = 0.7F;
+        this.model = new BansheModel();
     }
 
 
@@ -31,20 +32,11 @@ public class PlasmaProjectileRenderer<T extends PlasmaProjectileEntity> extends 
         stack.translate(0,1.5,0);
         stack.mulPose(Axis.YP.rotationDegrees(180.0F - value));
         stack.mulPose(Axis.ZP.rotationDegrees(-180F));
-        VertexConsumer vertexConsumer = source.getBuffer(RenderType.entityTranslucentEmissive(TEXTURE));
-        int i = type.getColor();
-        float r = (float) (i >> 16 & 255) / 255.0F;
-        float g = (float) (i >> 8 & 255) / 255.0F;
-        float b = (float) (i & 255) / 255.0F;
-        this.model.renderToBuffer(stack, vertexConsumer, value3, OverlayTexture.NO_OVERLAY, r, g, b, 1.0F);
+        VertexConsumer vertexConsumer = source.getBuffer(this.model.renderType(getTextureLocation(type)));
+        this.model.renderToBuffer(stack, vertexConsumer, value3, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
 
         stack.popPose();
         super.render(type, value, value2, stack, source, value3);
-    }
-
-    @Override
-    protected int getBlockLightLevel(T type, BlockPos pos) {
-        return Mth.clamp(super.getBlockLightLevel(type, pos) + 7, 0, 15);
     }
 
     @Override

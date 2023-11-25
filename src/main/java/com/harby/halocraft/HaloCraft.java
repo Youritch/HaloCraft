@@ -37,6 +37,7 @@ public class HaloCraft
         HaloBlocks.register(modEventBus);
         HaloCreativeTab.register(modEventBus);
         HaloEntities.register(modEventBus);
+        HaloParticles.register(modEventBus);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, HaloConfig.SERVER_SPEC ,HaloCraft.MODID+"_config.toml");
         HaloConfig.loadConfig(HaloConfig.SERVER_SPEC, FMLPaths.CONFIGDIR.get().resolve(HaloCraft.MODID+"_config.toml").toString());

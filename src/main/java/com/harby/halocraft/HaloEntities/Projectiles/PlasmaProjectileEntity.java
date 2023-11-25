@@ -2,6 +2,7 @@ package com.harby.halocraft.HaloEntities.Projectiles;
 
 import com.harby.halocraft.HaloCraft;
 import com.harby.halocraft.core.HaloEntities;
+import com.harby.halocraft.core.HaloParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -56,13 +57,13 @@ public class PlasmaProjectileEntity extends Projectile {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        tag.putInt("color",this.getColor());
-        tag.putInt("temperature",this.getTemperature());
+        this.setColor(tag.getInt("color"));
+        this.setTemperature(tag.getInt("temperature"));
     }
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
-        this.setColor(tag.getInt("color"));
-        this.setTemperature(tag.getInt("temperature"));
+        tag.putInt("color",this.getColor());
+        tag.putInt("temperature",this.getTemperature());
     }
 
 
@@ -102,7 +103,7 @@ public class PlasmaProjectileEntity extends Projectile {
                 this.noPhysics = true;
                 flag = false;
             }else{
-                if (this.getTemperature() > 500 && state.isFlammable(this.level(),result.getBlockPos(),result.getDirection())){
+                if (this.getTemperature() >= 500 && state.isFlammable(this.level(),result.getBlockPos(),result.getDirection())){
                     BlockPos pos = result.getBlockPos().relative(result.getDirection());
                     BlockState fire = Blocks.FIRE.defaultBlockState();
                     level().setBlock(pos,fire,2);
@@ -118,7 +119,7 @@ public class PlasmaProjectileEntity extends Projectile {
     @Override
     public void tick() {
         super.tick();
-        if (this.tickCount >= 300) {
+        if (this.tickCount >= 200) {
             this.remove(RemovalReason.DISCARDED);
         }
         HitResult hitresult = ProjectileUtil.getHitResultOnMoveVector(this, this::canHitEntity);
@@ -127,24 +128,31 @@ public class PlasmaProjectileEntity extends Projectile {
         double d1 = this.getY() + vec3.y;
         double d2 = this.getZ() + vec3.z;
         this.setPos(d0, d1, d2);
+        double r = (float) (this.getColor() >> 16 & 255) / 255.0F;
+        double g = (float) (this.getColor() >> 8 & 255) / 255.0F;
+        double b = (float) (this.getColor() & 255) / 255.0F;
+
+        level().addParticle(HaloParticles.PLASMA_TRAIL.get(),d0-0.2, d1-0.2, d2-0.2,r,g,b);
 
         if (hitresult.getType() != HitResult.Type.MISS && !net.minecraftforge.event.ForgeEventFactory.onProjectileImpact(this, hitresult)) {
             this.onHit(hitresult);
         }
     }
 
+
     @Override
     protected void onHitEntity(EntityHitResult entityHitResult) {
         if (!this.level().isClientSide()) {
             if (entityHitResult.getEntity() instanceof LivingEntity livingEntity){
                 livingEntity.hurt(this.level().damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), getDamage());
-                if (this.getTemperature() > 100){
-                    int extraFire = this.getTemperature() % 100;
-                    livingEntity.setSecondsOnFire(5 * extraFire);
+                if (this.getTemperature() >= 200){
+                    livingEntity.setSecondsOnFire(10);
                 }
             }
         }
     }
+
+
 
     public void setBaseDamage(float i){
         this.setBaseDamage = i;

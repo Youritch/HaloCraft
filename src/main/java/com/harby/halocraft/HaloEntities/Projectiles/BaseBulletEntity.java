@@ -53,11 +53,11 @@ public class BaseBulletEntity extends Projectile {
 
     @Override
     protected void readAdditionalSaveData(CompoundTag tag) {
-        tag.putInt("bullet_type",this.getProjectileType());
+        this.setProjectileType(tag.getInt("bullet_type"));
     }
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
-        this.setProjectileType(tag.getInt("bullet_type"));
+        tag.putInt("bullet_type",this.getProjectileType());
     }
 
 
