@@ -25,6 +25,10 @@ public class Banshe extends BasicVehicleEntity {
         return true;
     }
 
+    @Override
+    public float setMinFlyingSpeed() {
+        return 1f;
+    }
 
     @Override
     public float getMaxVehicleHealth() {

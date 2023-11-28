@@ -71,7 +71,7 @@ public class Ghost extends BasicVehicleEntity {
                 bulletEntity.setBaseDamage(10.0F);
                 bulletEntity.setTemperature(500);
                 bulletEntity.setColor(3113940);
-                bulletEntity.shootFromRotation(this, this.getXRot(), this.getYRot(), 0.0F, 6.0F, 1.0F);
+                bulletEntity.shootFromRotation(this, this.getXRot(), this.getYRot(), 0.0F, 3.0F, 1.0F);
                 Vec3 vec3;
                 if (random.nextFloat() < 0.5f){
                     vec3 = (new Vec3(1.5D, 0.0D, 0.42D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));

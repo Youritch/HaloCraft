@@ -30,7 +30,7 @@ public class GhostModel<T extends Ghost> extends EntityModel<T> {
 		MeshDefinition meshdefinition = new MeshDefinition();
 		PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition bone3 = partdefinition.addOrReplaceChild("bone3", CubeListBuilder.create().texOffs(-9, -9).addBox(-6.0F, -12.0F, -7.0F, 12.0F, 8.0F, 11.0F, new CubeDeformation(0.0F))
+		PartDefinition bone3 = partdefinition.addOrReplaceChild("bone3", CubeListBuilder.create().texOffs(-9, -9).addBox(-6.0F, -10.0F, -7.0F, 12.0F, 6.0F, 11.0F, new CubeDeformation(0.0F))
 		.texOffs(-18, -18).addBox(-9.0F, -9.0F, -15.0F, 3.0F, 3.0F, 20.0F, new CubeDeformation(0.0F))
 		.texOffs(-18, -18).mirror().addBox(6.0F, -9.0F, -15.0F, 3.0F, 3.0F, 20.0F, new CubeDeformation(0.0F)).mirror(false)
 		.texOffs(-24, -24).addBox(-8.0F, -9.0F, 4.0F, 16.0F, 5.0F, 26.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 24.0F, -16.0F));

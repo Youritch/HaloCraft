@@ -128,12 +128,14 @@ public class BasicVehicleEntity extends Entity {
     public boolean isWaterVehicle(){
         return false;
     }
-    public boolean isFlyingVehicle(){
+    public boolean isFlyingVehicle(){return false;}
+    public boolean isFlyingHoveringVehicle(){return false;}
+    public boolean isHoveringVehicle(){
         return false;
     }
 
-    public boolean isHoveringVehicle(){
-        return false;
+    public float setMinFlyingSpeed(){
+        return 0.5f;
     }
 
 
@@ -150,7 +152,7 @@ public class BasicVehicleEntity extends Entity {
 
     @Override
     public boolean isNoGravity() {
-        return this.isFlyingVehicle();
+        return this.isFlyingHoveringVehicle();
     }
 
     @Override
@@ -159,7 +161,7 @@ public class BasicVehicleEntity extends Entity {
         this.xRotO = this.getXRot();
         this.yRotO = Mth.wrapDegrees(this.getYRot());
         float acceleration = this.getAccelerationLevel();
-        if (this.isWaterVehicle() || this.isFlyingVehicle()){
+        if (this.isWaterVehicle() || this.isFlyingHoveringVehicle() || this.isFlyingVehicle()){
             if (controlDownTicks > 0) {
                 this.setDeltaMovement(this.getDeltaMovement().add(0, -0.08, 0));
                 controlDownTicks--;
@@ -202,13 +204,31 @@ public class BasicVehicleEntity extends Entity {
                 Vec3 vec3 = new Vec3(0, 0, Mth.clamp(acceleration, -0.25F, this.getTopSpeed()) * 0.2F).xRot(-this.getXRot() * ((float) Math.PI / 180F)).yRot(-this.getYRot() * ((float) Math.PI / 180F));
                 this.setVector(vec3);
                 this.setDeltaMovement(this.getDeltaMovement().add(vec3));
-            }if (this.isFlyingVehicle() && this.getFirstPassenger() != null){
+            }
+
+            if (this.isFlyingHoveringVehicle() && this.getFirstPassenger() != null){
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 this.setDeltaMovement(this.getDeltaMovement().multiply(flyingSpeed(), flyingSpeed(), flyingSpeed()));
-            }else if (this.isInWaterOrBubble() && this.isWaterVehicle()) {
+            }
+            else if (this.isFlyingVehicle() && this.getFirstPassenger() != null){
+                this.move(MoverType.SELF, this.getDeltaMovement());
+                this.setDeltaMovement(this.getDeltaMovement().multiply(flyingSpeed(), flyingSpeed(), flyingSpeed()));
+                if (!this.onGround()){
+                    Vec3 vec3 = (new Vec3(0.0D, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
+                    this.setDeltaMovement(this.getDeltaMovement().add(vec3));
+                    if (this.getAccelerationLevel() < this.setMinFlyingSpeed()){
+                        float fallingV = this.setMinFlyingSpeed() - this.getAccelerationLevel();
+                        this.setDeltaMovement(this.getDeltaMovement().add(0,-fallingV,0));
+                    }
+                }
+            }
+
+            else if (this.isInWaterOrBubble() && this.isWaterVehicle()) {
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 this.setDeltaMovement(this.getDeltaMovement().multiply(waterSpeed(), waterSpeed(), waterSpeed()));
-            }else if (this.isHoveringVehicle()) {
+            }
+
+            else if (this.isHoveringVehicle()) {
                 if (this.isInFluidType()){
                     this.setDeltaMovement(this.getDeltaMovement().add(0, 0.1F, 0));
                 }else{
@@ -216,7 +236,9 @@ public class BasicVehicleEntity extends Entity {
                 }
                 this.move(MoverType.SELF, this.getDeltaMovement());
                 this.setDeltaMovement(this.getDeltaMovement().multiply(flyingSpeed(), flyingSpeed(), flyingSpeed()));
-            } else {
+            }
+
+            else {
                 this.setDeltaMovement(this.getDeltaMovement().add(0, -0.3F, 0));
                 this.move(MoverType.SELF, this.getDeltaMovement().scale(0.9F));
                 this.setDeltaMovement(this.getDeltaMovement().multiply(speed(),speed(),speed()));
