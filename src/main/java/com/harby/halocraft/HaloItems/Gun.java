@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class Gun extends Item {
+public abstract class Gun extends Item {
     public Gun(Properties properties) {
         super(properties);
         HaloItems.HALO_ITEMS.add(this);
@@ -48,28 +48,20 @@ public class Gun extends Item {
         return 72000;
     }
 
-    public int getShootingDelay(){
-        return 5;
-    }
+    public abstract int getShootingDelay();
 
-    public void shotProjectile(Level level, LivingEntity livingEntity,ItemStack stack){
-        if (!level.isClientSide) {
-            BaseBulletEntity bulletEntity = new BaseBulletEntity(level,livingEntity);
-            bulletEntity.setProjectileType(getAmmoType(stack));
-            bulletEntity.setDamage(5.0f);
-            bulletEntity.shootFromRotation(livingEntity, livingEntity.getXRot(), livingEntity.getYRot(), 0.0F, 6.0F, 1.0F);
-            level.addFreshEntity(bulletEntity);
-        }
-    }
+    public abstract void shotProjectile(Level level, LivingEntity livingEntity,ItemStack stack);
+
+    public abstract int getMaxAmmo();
+
+    public abstract int getWeaponReloadCooldown();
 
     public void reloadGun(Player player,ItemStack stack){
         player.getCooldowns().addCooldown(this, this.getWeaponReloadCooldown());
         this.setAmmo(stack,getMaxAmmo());
     }
 
-    public int getWeaponReloadCooldown(){
-        return 40;
-    }
+
 
     public int getAmmo(ItemStack stack) {
         CompoundTag compoundtag = stack.getTag();
@@ -89,12 +81,6 @@ public class Gun extends Item {
     public void setAmmoType(ItemStack stack, int value) {
         CompoundTag compoundtag = stack.getOrCreateTag();
         compoundtag.putInt("type", value);
-    }
-
-
-
-    public int getMaxAmmo(){
-        return 30;
     }
 
     @Override

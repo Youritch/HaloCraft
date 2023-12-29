@@ -21,6 +21,11 @@ public class AssaultRifle extends Gun{
     }
 
     @Override
+    public int getWeaponReloadCooldown() {
+        return 40;
+    }
+
+    @Override
     public void shotProjectile(Level level, LivingEntity livingEntity,ItemStack stack){
         if (!level.isClientSide) {
             BaseBulletEntity bulletEntity = new BaseBulletEntity(level,livingEntity);
@@ -30,4 +35,6 @@ public class AssaultRifle extends Gun{
             level.addFreshEntity(bulletEntity);
         }
     }
+
+
 }
