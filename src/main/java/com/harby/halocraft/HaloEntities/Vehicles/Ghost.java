@@ -6,21 +6,12 @@ import com.harby.halocraft.HaloEntities.Projectiles.PlasmaProjectileEntity;
 import com.harby.halocraft.Message.HaloKeys;
 import com.harby.halocraft.core.HaloConfig;
 import com.harby.halocraft.core.HaloEntities;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 public class Ghost extends BasicVehicleEntity {
-    private static final EntityDataAccessor<Integer> TINT = SynchedEntityData.defineId(Ghost.class, EntityDataSerializers.INT);
     private int shooting_ticks = 0;
     public Ghost(Level level) {
         super(HaloEntities.GHOST.get(), level);
@@ -92,40 +83,4 @@ public class Ghost extends BasicVehicleEntity {
         }
     }
 
-
-    @Override
-    protected void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
-        this.setTint(tag.getInt("tint"));
-    }
-
-    @Override
-    protected void addAdditionalSaveData(CompoundTag tag) {
-        super.addAdditionalSaveData(tag);
-        tag.putInt("tint",this.getTint());
-    }
-
-    @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(TINT, 0);
-    }
-
-    public void setTint(int i){
-        this.entityData.set(TINT,i);
-    }
-    public int getTint(){
-        return this.entityData.get(TINT);
-    }
-
-    @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
-        if (!player.level().isClientSide && player.isShiftKeyDown()){
-            ItemStack stack = player.getItemInHand(hand);
-            if (stack.getItem() instanceof DyeItem dyeItem){
-                this.setTint(dyeItem.getDyeColor().getFireworkColor());
-            }
-        }
-        return super.interact(player, hand);
-    }
 }

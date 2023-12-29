@@ -1,9 +1,8 @@
 package com.harby.halocraft.HaloEntities.BaseClasses;
 
 import com.harby.halocraft.HaloCraft;
+import com.harby.halocraft.HaloEntities.Vehicles.Ghost;
 import com.harby.halocraft.Message.HaloKeys;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -21,6 +20,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
@@ -31,6 +31,7 @@ import net.minecraft.world.phys.Vec3;
 public class BasicVehicleEntity extends Entity {
     private static final EntityDataAccessor<Float> ACCELERATION = SynchedEntityData.defineId(BasicVehicleEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> DAMAGE_LEVEL = SynchedEntityData.defineId(BasicVehicleEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Integer> TINT = SynchedEntityData.defineId(Ghost.class, EntityDataSerializers.INT);
     private int lSteps;
     private double lx;
     private double ly;
@@ -58,6 +59,7 @@ public class BasicVehicleEntity extends Entity {
     protected void defineSynchedData() {
         this.entityData.define(ACCELERATION, 0.0F);
         this.entityData.define(DAMAGE_LEVEL, 0.0F);
+        this.entityData.define(TINT, 0);
     }
 
     protected Entity.MovementEmission getMovementEmission() {
@@ -68,12 +70,14 @@ public class BasicVehicleEntity extends Entity {
     protected void readAdditionalSaveData(CompoundTag tag) {
         this.setDamageLevel(tag.getFloat("damage"));
         this.setAcceleration(tag.getFloat("acceleration"));
+        this.setTint(tag.getInt("tint"));
     }
 
     @Override
     protected void addAdditionalSaveData(CompoundTag tag) {
         tag.putFloat("damage",this.getDamageLevel());
         tag.putFloat("acceleration",this.getAccelerationLevel());
+        tag.putInt("tint",this.getTint());
     }
 
     @Override
@@ -81,7 +85,12 @@ public class BasicVehicleEntity extends Entity {
         return new ClientboundAddEntityPacket(this, this.getId());
     }
 
-
+    public void setTint(int i){
+        this.entityData.set(TINT,i);
+    }
+    public int getTint(){
+        return this.entityData.get(TINT);
+    }
     public float getDamageLevel(){
         return entityData.get(DAMAGE_LEVEL);
     }
@@ -216,7 +225,7 @@ public class BasicVehicleEntity extends Entity {
                 if (!this.onGround()){
                     Vec3 vec3 = (new Vec3(0.0D, 0.0D, 0.0D)).yRot(-this.getYRot() * ((float)Math.PI / 180F) - ((float)Math.PI / 2F));
                     this.setDeltaMovement(this.getDeltaMovement().add(vec3));
-                    if (this.getAccelerationLevel() < this.setMinFlyingSpeed()){
+                    if (this.getAccelerationLevel() < this.setMinFlyingSpeed() && this.controlUpTicks <= 0){
                         float fallingV = this.setMinFlyingSpeed() - this.getAccelerationLevel();
                         this.setDeltaMovement(this.getDeltaMovement().add(0,-fallingV,0));
                     }
@@ -365,8 +374,17 @@ public class BasicVehicleEntity extends Entity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand) {
-        player.startRiding(this);
-        this.gameEvent(GameEvent.ENTITY_INTERACT);
+        if (!player.level().isClientSide){
+            if (player.isShiftKeyDown()){
+                ItemStack stack = player.getItemInHand(hand);
+                if (stack.getItem() instanceof DyeItem dyeItem){
+                    this.setTint(dyeItem.getDyeColor().getFireworkColor());
+                }
+            }else{
+                player.startRiding(this);
+            }
+            this.gameEvent(GameEvent.ENTITY_INTERACT);
+        }
         return super.interact(player, hand);
     }
 

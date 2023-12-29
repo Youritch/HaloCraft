@@ -1,11 +1,9 @@
 package com.harby.halocraft.Client;
 
-import com.harby.halocraft.Client.Models.BansheModel;
-import com.harby.halocraft.Client.Models.GhostModel;
-import com.harby.halocraft.Client.Models.PlasmaProjectileModel;
-import com.harby.halocraft.Client.Models.WarthogModel;
+import com.harby.halocraft.Client.Models.*;
 import com.harby.halocraft.Client.Renderers.*;
 import com.harby.halocraft.HaloCraft;
+import com.harby.halocraft.HaloEntities.Vehicles.F_19;
 import com.harby.halocraft.Particles.PlasmaParticleTrail;
 import com.harby.halocraft.core.HaloEntities;
 import com.harby.halocraft.core.HaloParticles;
@@ -28,6 +26,7 @@ public class ClientEvents {
         event.registerLayerDefinition(GhostModel.LAYER_LOCATION, GhostModel::createBodyLayer);
         event.registerLayerDefinition(BansheModel.LAYER_LOCATION, BansheModel::createBodyLayer);
         event.registerLayerDefinition(PlasmaProjectileModel.LAYER_LOCATION, PlasmaProjectileModel::createBodyLayer);
+        event.registerLayerDefinition(F_19Model.LAYER_LOCATION, F_19Model::createBodyLayer);
     }
 
 
@@ -36,6 +35,7 @@ public class ClientEvents {
         event.registerEntityRenderer(HaloEntities.CAR.get(), WarthogRenderer::new);
         event.registerEntityRenderer(HaloEntities.GHOST.get(), GhostRenderer::new);
         event.registerEntityRenderer(HaloEntities.BANSHE.get(), BansheRenderer::new);
+        event.registerEntityRenderer(HaloEntities.F29.get(), F_19Renderer::new);
         event.registerEntityRenderer(HaloEntities.BULLET.get(), BulletRenderer::new);
         event.registerEntityRenderer(HaloEntities.LASER.get(), PlasmaProjectileRenderer::new);
     }

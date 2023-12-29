@@ -5,6 +5,7 @@ import com.harby.halocraft.HaloEntities.Projectiles.BaseBulletEntity;
 import com.harby.halocraft.HaloEntities.Projectiles.PlasmaProjectileEntity;
 import com.harby.halocraft.HaloEntities.Vehicles.Banshe;
 import com.harby.halocraft.HaloEntities.Vehicles.CarEntity;
+import com.harby.halocraft.HaloEntities.Vehicles.F_19;
 import com.harby.halocraft.HaloEntities.Vehicles.Ghost;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -39,6 +40,9 @@ public class HaloEntities {
     public static final RegistryObject<EntityType<Banshe>> BANSHE = HALO_ENTITIES.register("banshe",
             () -> EntityType.Builder.of((EntityType<Banshe> p_33002_, Level level) -> new Banshe(level), MobCategory.MISC).sized(2f, 2f)
                     .build(new ResourceLocation(HaloCraft.MODID, "banshe").toString()));
+    public static final RegistryObject<EntityType<F_19>> F29 = HALO_ENTITIES.register("f29",
+            () -> EntityType.Builder.of((EntityType<F_19> p_33002_, Level level) -> new F_19(level), MobCategory.MISC).sized(2f, 2f)
+                    .build(new ResourceLocation(HaloCraft.MODID, "f29").toString()));
 
     public static final RegistryObject<EntityType<BaseBulletEntity>> BULLET = register("bullet",
             EntityType.Builder.of((EntityType<BaseBulletEntity> p_33002_, Level level) -> new BaseBulletEntity(level), MobCategory.MISC)

@@ -21,6 +21,4 @@ public class CommonEvents {
         event.register(HaloKeybinds.SHOOTING_KEY);
     }
 
-
-
 }
