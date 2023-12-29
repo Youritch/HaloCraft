@@ -27,6 +27,7 @@ public class ClientEvents {
         event.registerLayerDefinition(BansheModel.LAYER_LOCATION, BansheModel::createBodyLayer);
         event.registerLayerDefinition(PlasmaProjectileModel.LAYER_LOCATION, PlasmaProjectileModel::createBodyLayer);
         event.registerLayerDefinition(F_19Model.LAYER_LOCATION, F_19Model::createBodyLayer);
+        event.registerLayerDefinition(GruntModel.LAYER_LOCATION, GruntModel::createBodyLayer);
     }
 
 
@@ -38,6 +39,8 @@ public class ClientEvents {
         event.registerEntityRenderer(HaloEntities.F29.get(), F_19Renderer::new);
         event.registerEntityRenderer(HaloEntities.BULLET.get(), BulletRenderer::new);
         event.registerEntityRenderer(HaloEntities.LASER.get(), PlasmaProjectileRenderer::new);
+
+        event.registerEntityRenderer(HaloEntities.GRUNT.get(), GruntRenderer::new);
     }
 
     @SubscribeEvent

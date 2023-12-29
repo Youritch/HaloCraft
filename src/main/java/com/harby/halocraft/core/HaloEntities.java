@@ -1,6 +1,7 @@
 package com.harby.halocraft.core;
 
 import com.harby.halocraft.HaloCraft;
+import com.harby.halocraft.HaloEntities.Alien.Grunt;
 import com.harby.halocraft.HaloEntities.Projectiles.BaseBulletEntity;
 import com.harby.halocraft.HaloEntities.Projectiles.PlasmaProjectileEntity;
 import com.harby.halocraft.HaloEntities.Vehicles.Banshe;
@@ -28,6 +29,9 @@ public class HaloEntities {
         return HALO_ENTITIES.register(registryname, () -> entityTypeBuilder.build(registryname));
     }
 
+    public static final RegistryObject<EntityType<Grunt>> GRUNT = HALO_ENTITIES.register("grunt",
+            () -> EntityType.Builder.of(Grunt::new, MobCategory.MONSTER).sized(0.6f, 1.9f)
+                    .build(new ResourceLocation(HaloCraft.MODID, "grunt").toString()));
 
 
     public static final RegistryObject<EntityType<CarEntity>> CAR = HALO_ENTITIES.register("car",
