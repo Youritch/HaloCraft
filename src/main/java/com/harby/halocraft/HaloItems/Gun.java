@@ -23,9 +23,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class Gun extends Item {
+    private boolean isReloading = false;
+    private boolean isShooting = false;
+    private int shootingTicks = 0;
     public Gun(Properties properties) {
         super(properties);
         HaloItems.HALO_ITEMS.add(this);
+        HaloItems.GUNS_ITEMS.add(this);
     }
 
     public static final Predicate<ItemStack> AMMO = (stack) -> {
@@ -44,21 +48,28 @@ public abstract class Gun extends Item {
 
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack p_41454_) {
         return 72000;
     }
 
     public abstract int getShootingDelay();
 
-    public abstract void shotProjectile(Level level, LivingEntity livingEntity, ItemStack stack);
+    public abstract void shotProjectile(Level level, LivingEntity livingEntity,ItemStack stack);
 
     public abstract int getMaxAmmo();
 
     public abstract int getWeaponReloadCooldown();
 
-    public void reloadGun(Player player, ItemStack stack) {
+    public void reloadGun(Player player,ItemStack stack){
         player.getCooldowns().addCooldown(this, this.getWeaponReloadCooldown());
-        this.setAmmo(stack, getMaxAmmo());
+        this.setAmmo(stack,getMaxAmmo());
+    }
+
+    public boolean isReloading(){
+        return this.isReloading;
+    }
+    public boolean isShooting(){
+        return this.isShooting;
     }
 
 
@@ -84,15 +95,16 @@ public abstract class Gun extends Item {
 
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int va) {
-        if (va % this.getShootingDelay() != 0) {
+        if (va % this.getShootingDelay() != 0){
             return;
         }
-        if (this.getAmmo(stack) > 0) {
-            this.shotProjectile(level, livingEntity, stack);
-            this.setAmmo(stack, this.getAmmo(stack) - 1);
-        } else {
-            if (livingEntity instanceof Player player) {
-                player.displayClientMessage(Component.literal("Out of Ammo"), true);
+        if (this.getAmmo(stack) > 0){
+            this.isShooting = true;
+            this.shotProjectile(level,livingEntity,stack);
+            this.setAmmo(stack,this.getAmmo(stack)-1);
+        }else{
+            if (livingEntity instanceof Player player){
+                player.displayClientMessage(Component.literal("Out of Ammo"),true);
             }
         }
         super.onUseTick(level, livingEntity, stack, va);
@@ -105,56 +117,63 @@ public abstract class Gun extends Item {
         super.appendHoverText(itemStack, level, components, flag);
     }
 
-    public ItemStack lookForAmmo(Player player) {
+    public ItemStack lookForAmmo(Player player){
         int size = player.getInventory().getContainerSize();
-        for (int i = 0; i <= size; i++) {
+        for (int i = 0;i <= size;i++){
             ItemStack itemStack = player.getInventory().getItem(i);
-            if (AMMO.test(itemStack)) {
+            if (AMMO.test(itemStack)){
                 return itemStack;
             }
         }
         return ItemStack.EMPTY;
     }
+    public int flashTicks(){
+        return 10;
+    }
 
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int value, boolean devalue) {
-        if (entity instanceof Player livingEntity) {
-            if (livingEntity.getMainHandItem() == stack) {
-                if (this.getAmmo(stack) < this.getMaxAmmo()) {
-                    if (HaloKeys.getKey(2)) {
+        if (entity instanceof Player livingEntity){
+            if (livingEntity.getMainHandItem() == stack){
+                if (this.getAmmo(stack) < this.getMaxAmmo()){
+                    if (HaloKeys.getKey(2)){
                         HaloCraft.sendMSGToServer(new HaloKeys(livingEntity.getId(), 2));
-                        if (livingEntity.getAbilities().instabuild) {
-                            this.reloadGun(livingEntity, stack);
-                        } else {
+                        if (livingEntity.getAbilities().instabuild){
+                            this.reloadGun(livingEntity,stack);
+                        }else {
                             ItemStack stack1 = lookForAmmo(livingEntity);
-                            if (stack1 != ItemStack.EMPTY) {
+                            if (stack1 != ItemStack.EMPTY){
                                 stack1.shrink(1);
-                                this.setAmmoType(stack, getAmmunition(stack1.getItem()));
-                                this.reloadGun(livingEntity, stack);
+                                this.setAmmoType(stack,getAmmunition(stack1.getItem()));
+                                this.reloadGun(livingEntity,stack);
                             }
                         }
                     }
+                }
+            }
+            this.isReloading = livingEntity.getCooldowns().isOnCooldown(this);
+            if (this.isShooting){
+                this.shootingTicks++;
+                if (this.shootingTicks >= this.flashTicks()){
+                    this.isShooting = false;
+                    this.shootingTicks = 0;
                 }
             }
         }
         super.inventoryTick(stack, level, entity, value, devalue);
     }
 
-    public int getAmmunition(Item item) {
-        if (item == HaloItems.BULLET.get()) {
+    public int getAmmunition(Item item){
+        if (item == HaloItems.BULLET.get()){
             return 0;
-        }
-        if (item == HaloItems.EXPLOSIVE_BULLET.get()) {
+        }if (item == HaloItems.EXPLOSIVE_BULLET.get()){
             return 1;
-        }
-        if (item == HaloItems.FIRE_BULLET.get()) {
+        }if (item == HaloItems.FIRE_BULLET.get()){
             return 2;
-        }
-        if (item == HaloItems.FROZEN_BULLET.get()) {
+        }if (item == HaloItems.FROZEN_BULLET.get()){
             return 3;
-        }
-        if (item == HaloItems.PENETRATING_BULLET.get()) {
+        }if (item == HaloItems.PENETRATING_BULLET.get()){
             return 4;
         }
         return 0;
